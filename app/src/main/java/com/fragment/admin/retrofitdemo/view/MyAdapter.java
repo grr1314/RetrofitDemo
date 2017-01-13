@@ -1,4 +1,4 @@
-package com.fragment.admin.retrofitdemo;
+package com.fragment.admin.retrofitdemo.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,22 +13,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.fragment.admin.retrofitdemo.R;
+import com.fragment.admin.retrofitdemo.model.MovieEntity;
 
-import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by admin on 2016/12/20.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MRViewHolder> {
-    private List<MovieEntity.Subject> list;
+    private List<MovieEntity> list;
     private Context context;
     private LayoutInflater mInflater;
     RecyclerItemClickListener recyclerItemClickListener;
 
 
-    public MyAdapter(List<MovieEntity.Subject> list, Context context) {
+    public MyAdapter(List<MovieEntity> list, Context context) {
         this.list = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);
@@ -64,20 +64,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MRViewHolder> {
             Log.e("ADapter", "list is not null" + list.size());
         }
         View view = holder.itemView;
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recyclerItemClickListener.OnItemClick(view, position);
-            }
-        });
-        holder.tv_MovieName.setText("片名:"+list.get(position).getTitle());
-//        StringBuffer stringBuffer = new StringBuffer();
-//        List<MovieEntity.Cast> cast = (List<MovieEntity.Cast>) list.get(position).getCasts();
-//        for (int i = 0; i < cast.size(); i++) {
-//            stringBuffer.append(cast.get(i).getName() + " ");
-//        }
+        if (recyclerItemClickListener != null) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerItemClickListener.OnItemClick(view, position);
+                }
+            });
+        }
+
+        holder.tv_MovieName.setText("片名:" + list.get(position).getTitle());
         holder.tv_MovieNameO.setText(list.get(position).getOriginal_title());
-        holder.tv_Rating.setText("豆瓣评分："+list.get(position).getRating().getAverage());
+        holder.tv_Rating.setText("豆瓣评分：" + list.get(position).getRating().getAverage());
         Glide.with(context)
                 .load(list.get(position).getImages().getLarge())
                 .asBitmap()

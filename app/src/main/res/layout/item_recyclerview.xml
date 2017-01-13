@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="7dp"
+    android:background="#ffffff"
     android:orientation="horizontal">
 
     <ImageView
@@ -12,24 +13,30 @@
         android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:background="#50000000"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_MovieName"
             android:text="Text1"
+            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_MovieNameO"
             android:text="Text2"
+            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv_Rating"
             android:text="Text2"
+            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
