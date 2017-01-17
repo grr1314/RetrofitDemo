@@ -1,5 +1,6 @@
 package com.fragment.admin.retrofitdemo.view;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fragment.admin.retrofitdemo.iview.iMovieView;
 import com.fragment.admin.retrofitdemo.model.HttpResult;
 import com.fragment.admin.retrofitdemo.model.MovieEntity;
 import com.fragment.admin.retrofitdemo.R;
 import com.fragment.admin.retrofitdemo.http.HttpMethods;
 import com.fragment.admin.retrofitdemo.model.subscribers.ProgressSubscriber;
 import com.fragment.admin.retrofitdemo.model.subscribers.SubscriberOnNextListener;
+import com.fragment.admin.retrofitdemo.presenter.MoviePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ import rx.Subscriber;
 /**
  * Created by admin on 2016/12/14.
  */
-public class fragment extends Fragment {
+public class fragment extends Fragment implements iMovieView.View {
     private static final String TAG = "fragment";
     private static final String TAG_RESP = "response";
     private Button btn_search;
@@ -37,8 +40,12 @@ public class fragment extends Fragment {
     private RecyclerView movie_ls;
     private MyAdapter adapter;
     private List<MovieEntity> list = new ArrayList<>();
-
     private SubscriberOnNextListener getTopMoveOnNext;
+
+
+    private iMovieView.Presenter presenter;
+
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -46,7 +53,6 @@ public class fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         initListener();
         initViews(view);
-
         return view;
     }
 
@@ -61,6 +67,22 @@ public class fragment extends Fragment {
                 adapter = new MyAdapter(list, getActivity());
                 movie_ls.setAdapter(adapter);
             }
+
+            @Override
+            public void onStart() {
+                showDialog();
+            }
+
+            @Override
+            public void onCompleted() {
+                dismissDialog();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                dismissDialog();
+
+            }
         };
     }
 
@@ -70,6 +92,10 @@ public class fragment extends Fragment {
         movie_ls.setLayoutManager(linearLayoutManager);
         //添加divider
         movie_ls.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        //初始化Loading
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading");
         getMovie();
     }
 
@@ -77,6 +103,9 @@ public class fragment extends Fragment {
      * 进行网络请求
      */
     private void getMovie() {
+        new MoviePresenter(this, getActivity(), getTopMoveOnNext);
+        presenter.start(0,10);
+
 //        //豆瓣电影的url
 //        String url = "https://api.douban.com/v2/movie/";
 //        //配置Retrofit
@@ -140,12 +169,33 @@ public class fragment extends Fragment {
 //                    }
 //                });
 //        method3();
-        method4();
+//        method4();
     }
 
-    private void method4() {
-        HttpMethods.getInstance().getTopMovie(new ProgressSubscriber(getTopMoveOnNext, getActivity()), 0, 10);
+
+    @Override
+    public void showDialog() {
+        progressDialog.show();
     }
+
+    @Override
+    public void dismissDialog() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showDataInfo(Object t) {
+
+    }
+
+    @Override
+    public void setPresenter(iMovieView.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+//    private void method4() {
+//        HttpMethods.getInstance().getTopMovie(new ProgressSubscriber(getTopMoveOnNext, getActivity()), 0, 10);
+//    }
 
 //    /**
 //     * 步骤3 封装HttpMethods

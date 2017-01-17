@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.fragment.admin.retrofitdemo.iview.iMovieView;
 import com.fragment.admin.retrofitdemo.view.progress.progressCancelListener;
 import com.fragment.admin.retrofitdemo.view.progress.progressDialogHandler;
 
@@ -46,13 +47,15 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements progressCanc
 
     @Override
     public void onCompleted() {
-        dismissProgressDialog();
+//        dismissProgressDialog();
+        mSubscriberOnNextListener.onCompleted();
         Toast.makeText(context,"get top movie completed",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onError(Throwable e) {
-        dismissProgressDialog();
+//        dismissProgressDialog();
+        mSubscriberOnNextListener.onError(e);
         Log.e(TAG,"error:"+e.getMessage());
         Toast.makeText(context,"error:"+e.getMessage(),Toast.LENGTH_SHORT).show();
     }
@@ -65,7 +68,8 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements progressCanc
     @Override
     public void onStart() {
         super.onStart();
-        showProgressDialog();
+        mSubscriberOnNextListener.onStart();
+//        showProgressDialog();
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.fragment.admin.retrofitdemo.http;
 
 import android.util.Log;
 
+import com.fragment.admin.retrofitdemo.factory.FastJsonConverterFactory;
+import com.fragment.admin.retrofitdemo.iview.iMovieView;
 import com.fragment.admin.retrofitdemo.model.HttpResult;
 import com.fragment.admin.retrofitdemo.model.MovieEntity;
 
@@ -26,12 +28,32 @@ public class HttpMethods {
     private static final String BASE_URL = "https://api.douban.com/v2/movie/";
     private static final int DEFAULT_TIMEOUT = 10;
     private Retrofit retrofit;
+    private Retrofit retrofitFastJson;
     private demoInterface movieService;
+    private demoInterface movieServiceFast;
 
     /**
      * 构造方法私有化
      */
     private HttpMethods() {
+        initOkHttpByGson();
+        initOkHttpByFast();
+    }
+
+    private void initOkHttpByFast() {
+        //创建一个OkHttpClient并设置超时时间
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        retrofitFastJson = new Retrofit.Builder()
+                .client(builder.build())
+                .addConverterFactory(FastJsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(BASE_URL)
+                .build();
+        movieServiceFast = retrofitFastJson.create(demoInterface.class);
+    }
+
+    private void initOkHttpByGson() {
         //创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
@@ -41,7 +63,6 @@ public class HttpMethods {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_URL)
                 .build();
-
         movieService = retrofit.create(demoInterface.class);
     }
 
@@ -80,9 +101,26 @@ public class HttpMethods {
      * @param start      起始位置
      * @param count      获取长度
      */
-    public void getTopMovie(Subscriber<List<MovieEntity>> subscriber, int start, int count) {
+    public void getTopMovieByGson(Subscriber<List<MovieEntity>> subscriber, int start, int count) {
         Log.e(TAG, "start:" + start + "count:" + count);
         movieService.getTopMovie(start, count)
+                .map(new HttpResultFunc<List<MovieEntity>>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 用于获取豆瓣电影Top250的数据,通过fastjson
+     * @param subscriber
+     * @param start
+     * @param count
+     */
+    public void getTopMovieByFastJson(Subscriber<List<MovieEntity>> subscriber, int start, int count)
+    {
+        Log.e(TAG, "start:" + start + "count:" + count);
+        movieServiceFast.getTopMovie(start, count)
                 .map(new HttpResultFunc<List<MovieEntity>>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

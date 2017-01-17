@@ -5,4 +5,7 @@ package com.fragment.admin.retrofitdemo.model.subscribers;
  */
 public interface SubscriberOnNextListener<T> {
     void onNext(T t);
+    void onStart();
+    void onCompleted();
+    void onError(Throwable e);
 }
