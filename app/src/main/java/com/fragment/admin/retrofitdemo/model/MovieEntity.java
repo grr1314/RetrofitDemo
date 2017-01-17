@@ -144,79 +144,79 @@ public class MovieEntity {
         }
     }
 
-    /**
-     * 图像
-     */
-    public class Avatars {
-        private String small;
-        private String medium;
-        private String large;
+//    /**
+//     * 图像
+//     */
+//    public class Avatars {
+//        private String small;
+//        private String medium;
+//        private String large;
+//
+//        public String getSmall() {
+//            return small;
+//        }
+//
+//        public void setSmall(String small) {
+//            this.small = small;
+//        }
+//
+//        public String getMedium() {
+//            return medium;
+//        }
+//
+//        public void setMedium(String medium) {
+//            this.medium = medium;
+//        }
+//
+//        public String getLarge() {
+//            return large;
+//        }
+//
+//        public void setLarge(String large) {
+//            this.large = large;
+//        }
+//    }
 
-        public String getSmall() {
-            return small;
-        }
-
-        public void setSmall(String small) {
-            this.small = small;
-        }
-
-        public String getMedium() {
-            return medium;
-        }
-
-        public void setMedium(String medium) {
-            this.medium = medium;
-        }
-
-        public String getLarge() {
-            return large;
-        }
-
-        public void setLarge(String large) {
-            this.large = large;
-        }
-    }
-
-    public class Rating {
-        private String average;
-        private String stars;
-        private String min;
-        private String max;
-
-        public String getMax() {
-            return max;
-        }
-
-        public void setMax(String max) {
-            this.max = max;
-        }
-
-        public String getAverage() {
-            return average;
-        }
-
-        public void setAverage(String average) {
-            this.average = average;
-        }
-
-        public String getStars() {
-            return stars;
-        }
-
-        public void setStars(String stars) {
-            this.stars = stars;
-        }
-
-        public String getMin() {
-            return min;
-        }
-
-        public void setMin(String min) {
-            this.min = min;
-        }
-
-
-    }
+//    public class Rating {
+//        private String average;
+//        private String stars;
+//        private String min;
+//        private String max;
+//
+//        public String getMax() {
+//            return max;
+//        }
+//
+//        public void setMax(String max) {
+//            this.max = max;
+//        }
+//
+//        public String getAverage() {
+//            return average;
+//        }
+//
+//        public void setAverage(String average) {
+//            this.average = average;
+//        }
+//
+//        public String getStars() {
+//            return stars;
+//        }
+//
+//        public void setStars(String stars) {
+//            this.stars = stars;
+//        }
+//
+//        public String getMin() {
+//            return min;
+//        }
+//
+//        public void setMin(String min) {
+//            this.min = min;
+//        }
+//
+//
+//    }
 
     @Override
     public String toString() {
